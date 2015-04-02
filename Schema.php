@@ -9,6 +9,7 @@
  * @updated by Sergey Rusakov <srusakov@gmail.com>
  */
 namespace romariosss\firebirddb;
+
 use yii\db\TableSchema;
 
 /**
@@ -30,14 +31,14 @@ class Schema extends \yii\db\Schema
      * column types (values)
      */
     public $typeMap = [
-      'integer' => self::TYPE_INTEGER,
-      'timestamp' => self::TYPE_TIMESTAMP,
-      'time' => self::TYPE_TIME,
-      'varchar' => self::TYPE_STRING,
-      'real' => self::TYPE_FLOAT,
-      'decimal' => self::TYPE_DECIMAL,
-      'text' => self::TYPE_TEXT,
-      ];
+        'integer' => self::TYPE_INTEGER,
+        'timestamp' => self::TYPE_TIMESTAMP,
+        'time' => self::TYPE_TIME,
+        'varchar' => self::TYPE_STRING,
+        'real' => self::TYPE_FLOAT,
+        'decimal' => self::TYPE_DECIMAL,
+        'text' => self::TYPE_TEXT,
+    ];
 
     /**
      * @var array the abstract column types mapped to physical column types.
@@ -278,14 +279,18 @@ class Schema extends \yii\db\Schema
             }
             $table->columns[$c->name] = $c;
             if ($c->isPrimaryKey) {
-                if ($table->primaryKey === null)
+                if ($table->primaryKey === null) {
                     $table->primaryKey = $c->name;
-                else if (is_string($table->primaryKey))
-                    $table->primaryKey = array($table->primaryKey, $c->name);
-                else
-                    $table->primaryKey[] = $c->name;
+                } else {
+                    if (is_string($table->primaryKey)) {
+                        $table->primaryKey = array($table->primaryKey, $c->name);
+                    } else {
+                        $table->primaryKey[] = $c->name;
+                    }
+                }
             }
         }
+
         return (count($table->columns) > 0);
     }
 
@@ -304,9 +309,9 @@ class Schema extends \yii\db\Schema
         $c->allowNull = $column['fnull'] !== '1';
         $c->isPrimaryKey = $column['fprimary'];
 //        $c->isForeignKey = false;
-        $c->size = (int) $column['flength'];
-        $c->scale = (int) $column['fscale'];
-        $c->precision = (int) $column['fprecision'];
+        $c->size = (int)$column['flength'];
+        $c->scale = (int)$column['fscale'];
+        $c->precision = (int)$column['fprecision'];
         $c->autoIncrement = $column['fautoinc'] === '1';
         $defaultValue = null;
         if (!empty($column['fdefault'])) {
@@ -344,14 +349,14 @@ class Schema extends \yii\db\Schema
             45 => 'BLOB_ID',
         );
 
-        if (array_key_exists((int) $column['fcodtype'], $baseTypes)) {
-            $type = $baseTypes[(int) $column['fcodtype']];
+        if (array_key_exists((int)$column['fcodtype'], $baseTypes)) {
+            $type = $baseTypes[(int)$column['fcodtype']];
         }
 
-        switch ((int) $column['fcodtype']) {
+        switch ((int)$column['fcodtype']) {
             case 7:
             case 8:
-                switch ((int) $column['fcodsubtype']) {
+                switch ((int)$column['fcodsubtype']) {
                     case 1:
                         $type = 'NUMERIC';
                         break;
@@ -363,10 +368,10 @@ class Schema extends \yii\db\Schema
             case 12:
             case 13:
             case 35:
-              $c->size=19;
-              break;
+                $c->size = 19;
+                break;
             case 16:
-                switch ((int) $column['fcodsubtype']) {
+                switch ((int)$column['fcodsubtype']) {
                     case 1:
                         $type = 'NUMERIC';
                         break;
@@ -379,7 +384,7 @@ class Schema extends \yii\db\Schema
                 }
                 break;
             case 261:
-                switch ((int) $column['fcodsubtype']) {
+                switch ((int)$column['fcodsubtype']) {
                     case 1:
                         $type = 'TEXT';
                         break;
@@ -394,7 +399,7 @@ class Schema extends \yii\db\Schema
 
     /**
      * Returns all table names in the database.
-     * 
+     *
      * @param string the schema of the tables. Defaults to empty string, meaning the current or default schema.
      * @return array all table names in the database.
      */
@@ -463,7 +468,7 @@ class Schema extends \yii\db\Schema
     public function dropColumn($table, $column)
     {
         return "ALTER TABLE " . $this->quoteTableName($table)
-                . " DROP " . $this->quoteColumnName($column);
+        . " DROP " . $this->quoteColumnName($column);
     }
 
     /**
@@ -476,8 +481,8 @@ class Schema extends \yii\db\Schema
     public function renameColumn($table, $name, $newName)
     {
         return "ALTER TABLE " . $this->quoteTableName($table) .
-                " ALTER " . $this->quoteColumnName($name)
-                . " TO " . $this->quoteColumnName($newName);
+        " ALTER " . $this->quoteColumnName($name)
+        . " TO " . $this->quoteColumnName($newName);
     }
 
     /**
@@ -500,31 +505,52 @@ class Schema extends \yii\db\Schema
         $type = preg_replace("/ +(not)? *null/i", "", $type);
 
         $baseSql = 'ALTER TABLE ' . $this->quoteTableName($table)
-                . ' ALTER ' . $this->quoteColumnName($column) . ' '
-                . ' TYPE ' . $this->getColumnType($type);
+            . ' ALTER ' . $this->quoteColumnName($column) . ' '
+            . ' TYPE ' . $this->getColumnType($type);
 
 
         if ($columnSchema->allowNull == $allowNullNewType) {
             return $baseSql;
         } else {
             $sql = 'EXECUTE BLOCK AS BEGIN'
-                    . ' EXECUTE STATEMENT \'' . trim($baseSql, ';') . '\';'
-                    . ' UPDATE RDB$RELATION_FIELDS SET RDB$NULL_FLAG = ' . ($allowNullNewType ? 'NULL' : '1')
-                    . ' WHERE RDB$FIELD_NAME = UPPER(\'' . $column . '\') AND RDB$RELATION_NAME = UPPER(\'' . $table . '\');';
+                . ' EXECUTE STATEMENT \'' . trim($baseSql, ';') . '\';'
+                . ' UPDATE RDB$RELATION_FIELDS SET RDB$NULL_FLAG = ' . ($allowNullNewType ? 'NULL' : '1')
+                . ' WHERE RDB$FIELD_NAME = UPPER(\'' . $column . '\') AND RDB$RELATION_NAME = UPPER(\'' . $table . '\');';
 
             /**
              * In any case (whichever option you choose), make sure that the column doesn't have any NULLs.
-             * Firebird will not check it for you. Later when you backup the database, everything is fine, 
+             * Firebird will not check it for you. Later when you backup the database, everything is fine,
              * but restore will fail as the NOT NULL column has NULLs in it. To be safe, each time you change from NULL to NOT NULL.
              */
             if (!$allowNullNewType) {
                 $sql .= ' UPDATE ' . $this->quoteTableName($table) . ' SET ' . $this->quoteColumnName($column) . ' = 0'
-                        . ' WHERE ' . $this->quoteColumnName($column) . ' IS NULL;';
+                    . ' WHERE ' . $this->quoteColumnName($column) . ' IS NULL;';
             }
             $sql .= ' END';
 
             return $sql;
         }
+    }
+
+    /**
+     * Determines the PDO type for the given PHP data value.
+     * @param mixed $data the data whose PDO type is to be determined
+     * @return integer the PDO type
+     * @see http://www.php.net/manual/en/pdo.constants.php
+     */
+    public function getPdoType($data)
+    {
+        static $typeMap = [
+            // php type => PDO type
+            'boolean' => \PDO::PARAM_INT,
+            'integer' => \PDO::PARAM_INT,
+            'string' => \PDO::PARAM_STR,
+            'resource' => \PDO::PARAM_LOB,
+            'NULL' => \PDO::PARAM_NULL,
+        ];
+        $type = gettype($data);
+
+        return isset($typeMap[$type]) ? $typeMap[$type] : \PDO::PARAM_STR;
     }
 
 }
