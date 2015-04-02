@@ -23,11 +23,11 @@ Installation
 ```json
 ...
 "require": {
-    "srusakov/firebirddb": "*"
+    "romariosss/firebirddb": "*"
 	},
   "repositories":[{
       "type":"git",
-      "url":"http://github.com/srusakov/yii2-firebirddb",
+      "url":"http://github.com/romariosss/yii2-firebirddb",
   }]
 ...
 ```
@@ -43,9 +43,9 @@ return [
             'username' => 'sysdba',
             'password' => 'masterkey',
             'charset' => 'utf8',
-            'pdoClass' => 'srusakov\firebirddb\PDO',
+            'pdoClass' => 'romariosss\firebirddb\PDO',
             'schemaMap' => [
-                                'firebird' => 'srusakov\firebirddb\Schema', // FireBird
+                                'firebird' => 'romariosss\firebirddb\Schema', // FireBird
                             ],
         ],
 ]
