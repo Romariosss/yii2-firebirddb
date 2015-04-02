@@ -20,6 +20,7 @@ use yii\db\TableSchema;
  * @updated by Ricardo Obregón <robregonm@gmail.com>
  * @updated by Edgard messias <edgardmessias@gmail.com>
  * @updated by Sergey Rusakov <srusakov@gmail.com>
+ * @updated by Roman Sterekhov <roman.sterehov@gmail.com>
  */
 class Schema extends \yii\db\Schema
 {

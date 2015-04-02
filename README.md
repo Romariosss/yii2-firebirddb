@@ -12,7 +12,7 @@ Requirements
 * PHP 5.4
 * PDO_Firebird extension enabled.
 * Firebird 2.5 (not tested on previous versions)
-* Yii 1.1.9
+* Yii 2.*
 
 
 Installation
@@ -64,4 +64,4 @@ This driver is not well tested in production ebvironment! Use it at your own ris
 Thanks to
 ---------
 
-@idlesign, @robregonm, @edgardmessias, @mr-rfh, @mlorentz75
+@idlesign, @robregonm, @edgardmessias, @mr-rfh, @mlorentz75, @srusakov
