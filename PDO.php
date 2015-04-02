@@ -6,7 +6,7 @@
  * @author idle sign <idlesign@yandex.ru>
  * @updated by Sergey Rusakov <srusakov@gmail.com>
  */
-namespace srusakov\firebirddb;
+namespace romariosss\firebirddb;
 
 /**
  * This is an extension of default PDO class for Firebird driver only

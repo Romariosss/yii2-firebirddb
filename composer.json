@@ -1,9 +1,9 @@
 {
-	"name": "srusakov/firebirddb",
+	"name": "romariosss/firebirddb",
   "version": "1.0.4",
 	"description": "Yii 2 Firebird DB driver",
 	"keywords": ["yii2", "firebird", "database", "driver"],
-	"homepage": "http://github.com/srusakov/yii2-firebirddb",
+	"homepage": "http://github.com/romariosss/yii2-firebirddb",
 	"type": "source",
 	"license": "BSD-3-Clause",
 	"require": {
@@ -11,13 +11,13 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"srusakov\\firebirddb\\": ""
+			"romariosss\\firebirddb\\": ""
 		}
   },
   "repositories":[
         {
             "type":"git",
-            "url":"http://github.com/srusakov/yii2-firebirddb"
+            "url":"http://github.com/romariosss/yii2-firebirddb"
         }
     ]
 }
