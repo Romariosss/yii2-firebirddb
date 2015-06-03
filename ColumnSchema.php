@@ -20,6 +20,7 @@ namespace romariosss\firebirddb;
  */
 class ColumnSchema extends \yii\db\ColumnSchema
 {
+    public $isForeignKey = false;
     /**
      * Extracts the PHP type from DB type.
      * @param string DB type
