@@ -554,4 +554,32 @@ class Schema extends \yii\db\Schema
         return isset($typeMap[$type]) ? $typeMap[$type] : \PDO::PARAM_STR;
     }
 
+    /**
+     * Executes the INSERT command, returning primary key values.
+     * @param string $table the table that new rows will be inserted into.
+     * @param array $columns the column data (name => value) to be inserted into the table.
+     * @return array primary key values or false if the command fails
+     * @since 2.0.4
+     */
+    public function insert($table, $columns)
+    {
+        $params = [];
+        $sql = $this->db->getQueryBuilder()->insert($table, $columns, $params);
+        $returnColumns = $this->getTableSchema($table)->primaryKey;
+        if (!empty($returnColumns)) {
+            $returning = [];
+            foreach ((array)$returnColumns as $name) {
+                $returning[] = $this->quoteColumnName($name);
+            }
+            $sql .= ' RETURNING ' . implode(', ', $returning);
+        }
+
+        $command = $this->db->createCommand($sql, $params);
+        $command->prepare(false);
+        $result = $command->queryOne();
+
+        return !$command->pdoStatement->rowCount() ? false : $result;
+
+    }
+
 }
