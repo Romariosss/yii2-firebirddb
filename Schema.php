@@ -393,7 +393,8 @@ class Schema extends \yii\db\Schema
                 break;
         }
 
-        $c->init(rtrim($type), $defaultValue);
+        $c->type = rtrim($type);
+        $c->defaultValue = $defaultValue;
 
         return $c;
     }
