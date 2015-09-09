@@ -163,10 +163,10 @@ class Schema extends \yii\db\Schema
 
         if (isset($parts[1])) {
             $table->schemaName = $parts[0];
-            $table->name = strtolower($parts[1]);
+            $table->name = $parts[1];
             $table->fullName = $this->quoteTableName($table->schemaName) . '.' . $this->quoteTableName($table->name);
         } else {
-            $table->name = strtolower($parts[0]);
+            $table->name = $parts[0];
             $table->fullName = $this->quoteTableName($table->name);
         }
     }
