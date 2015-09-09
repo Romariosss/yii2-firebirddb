@@ -63,15 +63,26 @@ class Schema extends \yii\db\Schema
         'money' => 'DECIMAL(19,4)',
     );
 
-    /**
-     * Quotes a table name for use in a query.
-     * We won't use quotes in Firebird.
-     *
-     * @param string table name
-     * @return string the properly quoted table name
-     */
-    public function quoteTableName($name)
+
+    public $reservedWords = [
+        'ORDER',
+        'TIME',
+        'POSITION',
+    ];
+
+    public function quoteSimpleTableName($name)
     {
+        if (in_array(strtoupper($name), $this->reservedWords)) {
+            return strpos($name, '"') !== false ? $name : '"' . $name . '"';
+        }
+        return $name;
+    }
+
+    public function quoteSimpleColumnName($name)
+    {
+        if (in_array(strtoupper($name), $this->reservedWords)) {
+            return parent::quoteSimpleColumnName($name);
+        }
         return $name;
     }
 
@@ -102,18 +113,6 @@ class Schema extends \yii\db\Schema
         }
     }
 
-
-    /**
-     * Quotes a column name for use in a query.
-     * We won't use quotes in Firebird.
-     *
-     * @param string column name
-     * @return string the properly quoted column name
-     */
-    public function quoteColumnName($name)
-    {
-        return $name;
-    }
 
     /**
      * Creates a table instance representing the metadata for the named table.
