@@ -68,6 +68,7 @@ class Schema extends \yii\db\Schema
         'ORDER',
         'TIME',
         'POSITION',
+        'PLAN'
     ];
 
     public function quoteSimpleTableName($name)
