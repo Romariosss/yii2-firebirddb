@@ -180,4 +180,10 @@ class QueryBuilder extends \yii\db\QueryBuilder
         return $command;
     }
 
+    public function dropColumn($table, $column)
+    {
+        return "ALTER TABLE " . $this->db->quoteTableName($table)
+        . " DROP " . $this->db->quoteColumnName($column);
+    }
+
 }
